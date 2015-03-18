@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.jackmiddlebrook.dailyselfie.Database.SelfieDataSource;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -55,8 +57,13 @@ public class SelfieViewActivity extends ListActivity {
         mAdapter = new SelfieViewAdapter(getApplicationContext());
         setListAdapter(mAdapter);
 
-       
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SelfieDataSource dataSource = new SelfieDataSource(this);
 
     }
 
