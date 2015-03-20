@@ -13,6 +13,10 @@ public class SelfieRecord {
     private String mSelfieText;
     private Uri mSelfieUri;
 
+
+
+    private int mSelfieId;
+
     public SelfieRecord(Bitmap selfieImage, String selfieText, Uri selfieUri) {
         this.mSelfieBitmap = selfieImage;
         this.mSelfieText = selfieText;
@@ -20,6 +24,13 @@ public class SelfieRecord {
     }
 
     public SelfieRecord() {
+
+    }
+
+    public SelfieRecord(int selfieId, String selfieText, String selfieUriString) {
+        this.mSelfieId = selfieId;
+        this.mSelfieText = selfieText;
+        this.mSelfieUri = Uri.parse(selfieUriString);
 
     }
 
@@ -43,7 +54,21 @@ public class SelfieRecord {
         return mSelfieUri;
     }
 
+    public String getSelfieUriAsString() {
+
+        return mSelfieUri.toString();
+
+    }
+
     public void setSelfieUri(Uri selfieUri) {
         this.mSelfieUri = selfieUri;
+    }
+
+    public int getSelfieId() {
+        return mSelfieId;
+    }
+
+    public void setSelfieId(int selfieId) {
+        mSelfieId = selfieId;
     }
 }

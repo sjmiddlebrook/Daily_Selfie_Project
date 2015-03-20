@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -54,8 +55,8 @@ public class SelfieViewActivity extends ListActivity {
             finish();
         }
 
-        mAdapter = new SelfieViewAdapter(getApplicationContext());
-        setListAdapter(mAdapter);
+//        mAdapter = new SelfieViewAdapter(getApplicationContext());
+//        setListAdapter(mAdapter);
 
     }
 
@@ -64,6 +65,9 @@ public class SelfieViewActivity extends ListActivity {
         super.onResume();
 
         SelfieDataSource dataSource = new SelfieDataSource(this);
+        ArrayList<SelfieRecord> selfies = dataSource.read();
+        mAdapter = new SelfieViewAdapter(getApplicationContext(), selfies);
+        setListAdapter(mAdapter);
 
     }
 
@@ -169,6 +173,11 @@ public class SelfieViewActivity extends ListActivity {
 
                 SelfieRecord newSelfie = new SelfieRecord(imageBitmap, selfieTag, mSelfieUri);
                 mAdapter.add(newSelfie);
+
+                /// add a new record of the selfie to the database
+                SelfieDataSource dataSource = new SelfieDataSource(this);
+                dataSource.create(newSelfie);
+
             }
 
 

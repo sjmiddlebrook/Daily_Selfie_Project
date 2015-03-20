@@ -18,11 +18,17 @@ import java.util.ArrayList;
  */
 public class SelfieViewAdapter extends BaseAdapter {
 
-    private ArrayList<SelfieRecord> mSelfieRecords = new ArrayList<SelfieRecord>();
+    private ArrayList<SelfieRecord> mSelfieRecords;
     private static LayoutInflater layoutInflater = null;
 
     public SelfieViewAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
+        mSelfieRecords = new ArrayList<SelfieRecord>();
+    }
+
+    public SelfieViewAdapter(Context context, ArrayList<SelfieRecord> selfieRecords) {
+        layoutInflater = LayoutInflater.from(context);
+        mSelfieRecords = selfieRecords;
     }
 
     public int getCount() {
@@ -42,7 +48,7 @@ public class SelfieViewAdapter extends BaseAdapter {
         View newView = convertView;
         ViewHolder holder;
 
-        SelfieRecord curr = mSelfieRecords.get(position);
+        SelfieRecord currentSelfie = mSelfieRecords.get(position);
 
         if (convertView == null) {
             holder = new ViewHolder();
@@ -55,13 +61,17 @@ public class SelfieViewAdapter extends BaseAdapter {
             holder = (ViewHolder) newView.getTag();
         }
 
-        String selfieString = curr.getSelfieText();
-        Bitmap selfieBit = curr.getSelfieBitmap();
-//        selfieBit = rotateBitmap(selfieBit, 270);
+        String selfieString = currentSelfie.getSelfieText();
+        Bitmap selfieBitmap = currentSelfie.getSelfieBitmap();
+        if (selfieBitmap == null) {
+            // TODO find how to get Bitmap from the URI
+            // the selfieBitmap should be the image in the list but it is not coming up
+        }
 
         // set the image and text for selfie mSelfieRecords
         holder.selfieText.setText(selfieString);
-        holder.selfie.setImageBitmap(selfieBit);
+        holder.selfie.setImageBitmap(selfieBitmap);
+
 
         return newView;
     }
