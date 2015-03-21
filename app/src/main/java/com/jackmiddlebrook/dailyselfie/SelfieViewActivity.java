@@ -41,6 +41,7 @@ public class SelfieViewActivity extends ListActivity {
     private SelfieViewAdapter mAdapter;
     private AlarmManager mAlarmManager;
     private Uri mSelfieUri;
+    private ArrayList<SelfieRecord> mSelfieList;
 
 
     @Override
@@ -64,11 +65,15 @@ public class SelfieViewActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
 
-        SelfieDataSource dataSource = new SelfieDataSource(this);
-        ArrayList<SelfieRecord> selfies = dataSource.read();
-        mAdapter = new SelfieViewAdapter(getApplicationContext(), selfies);
-        setListAdapter(mAdapter);
+        refreshSelfies();
 
+    }
+
+    private void refreshSelfies() {
+        SelfieDataSource dataSource = new SelfieDataSource(this);
+        mSelfieList = dataSource.read();
+        mAdapter = new SelfieViewAdapter(getApplicationContext(), mSelfieList);
+        setListAdapter(mAdapter);
     }
 
     @Override
@@ -97,9 +102,18 @@ public class SelfieViewActivity extends ListActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // to delete photos
         if (id == R.id.delete_photos) {
+
+            SelfieDataSource dataSource = new SelfieDataSource(this);
+
+            for (SelfieRecord selfie : mSelfieList) {
+                dataSource.delete(selfie.getSelfieId());
+            }
+            refreshSelfies();
+
             mAdapter.removeAllViews();
+
             return true;
         }
 

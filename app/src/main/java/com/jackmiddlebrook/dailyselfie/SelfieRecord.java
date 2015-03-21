@@ -1,11 +1,7 @@
 package com.jackmiddlebrook.dailyselfie;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
-
-import java.io.IOException;
 
 /**
  * to store the selfies the user takes
@@ -76,18 +72,5 @@ public class SelfieRecord {
         mSelfieId = selfieId;
     }
 
-    private Bitmap uriToBitmap(Context context) {
-        Bitmap imageBitmap = null;
-        try {
-            imageBitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), mSelfieUri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (imageBitmap != null) {
-            imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 250, 250, false);
-        }
 
-        return imageBitmap;
-
-    }
 }

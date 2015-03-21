@@ -57,6 +57,21 @@ public class SelfieDataSource {
         return selfies;
     }
 
+    // if add feature to update selfie name, this will update the selfie name in the database
+    public void update(SelfieRecord selfie) {
+        SQLiteDatabase database = open();
+        database.beginTransaction();
+
+        ContentValues updateSelfieValues = new ContentValues();
+        updateSelfieValues.put(SelfieSQLiteHelper.COLUMN_SELFIE_NAME, selfie.getSelfieText());
+        database.update(SelfieSQLiteHelper.SELFIES_TABLE,
+                updateSelfieValues,
+                String.format("%s=%d", BaseColumns._ID, selfie.getSelfieId()), null);
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        close(database);
+    }
+
     private int getIntFromColumnName(Cursor cursor, String columnName) {
         int columnIndex = cursor.getColumnIndex(columnName);
         return cursor.getInt(columnIndex);
@@ -73,6 +88,19 @@ public class SelfieDataSource {
 
     private void close(SQLiteDatabase database) {
         database.close();
+    }
+
+    public void delete(int selfieId) {
+        SQLiteDatabase database = open();
+        database.beginTransaction();
+
+        // implementation details
+        database.delete(SelfieSQLiteHelper.SELFIES_TABLE,
+                String.format("%s=%s", BaseColumns._ID, String.valueOf(selfieId)),
+                null);
+
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
     public void create(SelfieRecord selfie) {
