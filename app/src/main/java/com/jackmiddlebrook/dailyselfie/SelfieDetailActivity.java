@@ -32,7 +32,6 @@ public class SelfieDetailActivity extends Activity {
         imageView.setImageBitmap(imageBitmap);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
-//        Toast.makeText(getApplicationContext(), "You clicked a selfie: " + selfieUri, Toast.LENGTH_LONG).show();
     }
 
 

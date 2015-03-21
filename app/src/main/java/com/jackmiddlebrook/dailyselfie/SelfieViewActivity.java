@@ -34,7 +34,7 @@ public class SelfieViewActivity extends ListActivity {
     static final int REQUEST_IMAGE_CAPTURE = 0;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
-    private static final long EIGHTY_SECOND_ALARM_DELAY = 80000L;
+    private static final long SIXTY_SECOND_ALARM_DELAY = 60000L;
 
     private Intent mNotificationReceiverIntent;
     private PendingIntent mNotificationReceiverPendingIntent;
@@ -132,11 +132,17 @@ public class SelfieViewActivity extends ListActivity {
 
             // Set repeating alarm
             mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-                    System.currentTimeMillis() + EIGHTY_SECOND_ALARM_DELAY,
-                    EIGHTY_SECOND_ALARM_DELAY,
+                    System.currentTimeMillis() + SIXTY_SECOND_ALARM_DELAY,
+                    SIXTY_SECOND_ALARM_DELAY,
                     mNotificationReceiverPendingIntent);
 
             return true;
+        }
+
+        if (id == R.id.disable_alarm) {
+            if (mAlarmManager != null) {
+                mAlarmManager.cancel(mNotificationReceiverPendingIntent);
+            }
         }
 
 
@@ -185,12 +191,9 @@ public class SelfieViewActivity extends ListActivity {
                 String selfieTag = "Selfie from " + timestamp;
                 imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 250, 250, false);
 
-                Log.i(TAG, "selfieTag: " + selfieTag);
-
                 SelfieRecord newSelfie = new SelfieRecord(imageBitmap, selfieTag, mSelfieUri);
                 mAdapter.add(newSelfie);
 
-                Toast.makeText(this, "adding record to database", Toast.LENGTH_LONG).show();
                 // add a new record of the selfie to the database
                 SelfieDataSource dataSource = new SelfieDataSource(this);
                 dataSource.create(newSelfie);
