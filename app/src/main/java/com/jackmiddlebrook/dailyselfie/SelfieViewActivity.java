@@ -171,10 +171,13 @@ public class SelfieViewActivity extends ListActivity {
                 String selfieTag = "Selfie from " + timestamp;
                 imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 250, 250, false);
 
+                Log.i(TAG, "selfieTag: " + selfieTag);
+
                 SelfieRecord newSelfie = new SelfieRecord(imageBitmap, selfieTag, mSelfieUri);
                 mAdapter.add(newSelfie);
 
-                /// add a new record of the selfie to the database
+                Toast.makeText(this, "adding record to database", Toast.LENGTH_LONG).show();
+                // add a new record of the selfie to the database
                 SelfieDataSource dataSource = new SelfieDataSource(this);
                 dataSource.create(newSelfie);
 

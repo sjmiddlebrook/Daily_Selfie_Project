@@ -3,6 +3,8 @@ package com.jackmiddlebrook.dailyselfie;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -20,6 +23,7 @@ public class SelfieViewAdapter extends BaseAdapter {
 
     private ArrayList<SelfieRecord> mSelfieRecords;
     private static LayoutInflater layoutInflater = null;
+    private Context mContext;
 
     public SelfieViewAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
@@ -27,6 +31,7 @@ public class SelfieViewAdapter extends BaseAdapter {
     }
 
     public SelfieViewAdapter(Context context, ArrayList<SelfieRecord> selfieRecords) {
+        mContext = context;
         layoutInflater = LayoutInflater.from(context);
         mSelfieRecords = selfieRecords;
     }
@@ -62,10 +67,19 @@ public class SelfieViewAdapter extends BaseAdapter {
         }
 
         String selfieString = currentSelfie.getSelfieText();
+        Uri selfieUri = currentSelfie.getSelfieUri();
         Bitmap selfieBitmap = currentSelfie.getSelfieBitmap();
         if (selfieBitmap == null) {
             // TODO find how to get Bitmap from the URI
             // the selfieBitmap should be the image in the list but it is not coming up
+            try {
+                selfieBitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), selfieUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (selfieBitmap != null) {
+                selfieBitmap = Bitmap.createScaledBitmap(selfieBitmap, 250, 250, false);
+            }
         }
 
         // set the image and text for selfie mSelfieRecords
